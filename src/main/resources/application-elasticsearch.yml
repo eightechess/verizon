@@ -1,12 +1,4 @@
 spring:
-  data:
-    elasticsearch:
-      repositories:
-        enabled: true
-        host: localhost
-#        port: 9300
-        port: 9300
-
-
-
-
+  elasticsearch:
+    rest:
+      uris: http://localhost:9200
