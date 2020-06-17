@@ -2,6 +2,7 @@ package com.verizon.controller;
 
 import com.verizon.model.ParserSettings;
 import com.verizon.model.Payload;
+import com.verizon.model.PayloadGroup;
 import com.verizon.model.Status;
 import com.verizon.repo.PayloadRepo;
 import com.verizon.services.PayloadInterface;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -30,9 +32,9 @@ public class PayloadController {
 
 	Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
-	@CrossOrigin(origins = "http://localhost:9006")
+	@CrossOrigin(origins = "http://localhost:8082")
 	@GetMapping ("/getAllParameters")
-	public Iterable<Payload> getPayloads(@RequestParam(required = false) String status){
+	public PayloadGroup getPayloads(@RequestParam(required = false) String status){
 		return payloadInterface.getPayloads(status);
 	}
 
@@ -61,7 +63,7 @@ public class PayloadController {
 
 	@GetMapping("/discovered")
 	@Async("threadPoolTaskExecutor")
-	public List<Payload> Discovered() {
+	public Iterable<Payload> Discovered() {
 		return payloadRepo.findByStatus(Status.DISCOVERED);
 	}
 
@@ -71,9 +73,4 @@ public class PayloadController {
 		return payloadRepo.payLoadUrls(Status.DISCOVERED);
 	}
 
-	private void validate(Payload payload) {
-		Set<ConstraintViolation<Payload>> violation = validator.validate(payload);
-		if (violation.size() > 0)
-			throw new RuntimeException("Validation error: " + violation.stream().map(e->e.getMessage()).collect(Collectors.joining(",")));
-	}
 }

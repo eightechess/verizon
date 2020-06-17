@@ -1,9 +1,6 @@
 package com.verizon.services;
 
-import com.verizon.model.DoNotReportUrl;
-import com.verizon.model.ParserSettings;
-import com.verizon.model.Payload;
-import com.verizon.model.Status;
+import com.verizon.model.*;
 import com.verizon.repo.PayloadRepo;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,15 +11,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @Log4j2
 public class PayloadImp implements PayloadInterface {
+
+    public static final List<String> STATUSES = Arrays.asList(Status.values()).stream().map(Status::name).collect(Collectors.toList());
 
     @Autowired
     private PayloadRepo payloadRepo;
@@ -33,21 +29,24 @@ public class PayloadImp implements PayloadInterface {
     Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     @Override
-    public Iterable<Payload> getPayloads(@RequestParam(required = false) String status){
-        Status newstatus = Status.valueOf(status);
-        log.info("Status is: "+newstatus);
-        if(status != null) {
-            return payloadRepo.findByStatus(newstatus);
+    public PayloadGroup getPayloads(@RequestParam(required = false) String status){
+        log.info("Status is: "+status);
+        PayloadGroup result = new PayloadGroup();
+        if(STATUSES.contains(status)){
+            Status newStatus = Status.valueOf(status);
+            log.info("Find By Status {}", newStatus);
+            result.setContent(payloadRepo.findByStatus(newStatus));
+        }else{
+            log.info("Find All");
+            result.setContent(payloadRepo.findAll());
         }
-        return payloadRepo.findAll();
+        return result;
     }
 
     @Override
     public String savePayload(Payload payload) {
-        payload.setStatus(Status.DISCOVERED);
-        payload.setLastUpdated(new Date());
-        payloadRepo.save(payload);
         log.info("savePayload: {}", payload);
+        payloadRepo.save(payload);
         kafkaTemplate.send("REQUEST_SAMPLES",payload);
         return "Parameter "+payload.getRequestUrl() +" saved";
     }
@@ -61,23 +60,33 @@ public class PayloadImp implements PayloadInterface {
 
     @Override
     public void payLoadConsumer(Payload payload) {
-     //   validate(payload);
+        payload.setStatus(Status.DISCOVERED);
+        payload.setLastUpdated(new Date());
+        validate(payload);
         payloadRepo.save(payload);
-        List<Payload> payloadList= new ArrayList<Payload>();
-        payloadRepo.findAll().forEach(payloadList::add);
-        DoNotReportUrl doNotReportUrl = new DoNotReportUrl();
+
         List<DoNotReportUrl> doNotReportUrlList = new ArrayList<>();
-        for(int i = 0;i <payloadList.size(); i++){
-            doNotReportUrl.setUrl(payloadList.get(i).getRequestUrl());
-            doNotReportUrl.setGroup("orderStatus");
-            doNotReportUrlList.add(i,doNotReportUrl);
+        for(Payload onePayload: payloadRepo.findAll()){
+            DoNotReportUrl doNotReportUrl = new DoNotReportUrl();
+            doNotReportUrl.setUrl(onePayload.getRequestUrl());
+            doNotReportUrl.setGroup("doNotReport");
+            doNotReportUrlList.add(doNotReportUrl);
         }
-        kafkaTemplate.send("PARSER_SETTINGS","RELOAD_DO_NOT_REPORT_LINKS", doNotReportUrlList);
-        log.info("Payload: " + doNotReportUrlList +" saved");
+        DoNotReportUrlList doNotReportList = new DoNotReportUrlList();
+        doNotReportList.  setDoNotReportUrlList(doNotReportUrlList);
+        kafkaTemplate.send("PARSER_SETTINGS","RELOAD_DO_NOT_REPORT_LINKS", doNotReportList);
+        log.info("Payload: " + doNotReportList +" saved");
+    }
+
+    private void validate(Payload payload) {
+        Set<ConstraintViolation<Payload>> violation = validator.validate(payload);
+        if (violation.size() > 0)
+            throw new RuntimeException("Validation error: " + violation.stream().map(e->e.getMessage()).collect(Collectors.joining(",")));
     }
 
     @Override
     public String ignorePayload(List<Payload> payloads) {
+        log.info("Payloads " +payloads.size()+" ignored");
         List<Payload> payloadList = new ArrayList<>();
         for (Payload payload : payloads) {
             payload.setStatus(Status.IGNORED);
@@ -97,11 +106,4 @@ public class PayloadImp implements PayloadInterface {
     public List<Payload> DiscoveredUrl() {
         return null;
     }
-
-    private void validate(Payload payload) {
-        Set<ConstraintViolation<Payload>> violation = validator.validate(payload);
-        if (violation.size() > 0)
-            throw new RuntimeException("Validation error: " + violation.stream().map(e->e.getMessage()).collect(Collectors.joining(",")));
-    }
-
 }

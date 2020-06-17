@@ -9,7 +9,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface PayloadRepo extends ElasticsearchRepository<Payload, String> {
+    @Override
+    List<Payload> findAll();
     List<Payload> findByStatus(Status status);
     @Query(value = "SELECT  e.requestUrl FROM payload  e WHERE e.status= :status")
-    List<Payload> payLoadUrls(@Param("status") Status status);;
+    List<Payload> payLoadUrls(@Param("status") Status status);
 }

@@ -9,6 +9,6 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class DoNotReportUrlList {
-   List<DoNotReportUrl> doNotReportUrlList;
+public class PayloadGroup {
+    private List<Payload> content;
 }
