@@ -64,13 +64,13 @@ public class PayloadController {
 	@GetMapping("/discovered")
 	@Async("threadPoolTaskExecutor")
 	public Iterable<Payload> Discovered() {
-		return payloadRepo.findByStatus(Status.DISCOVERED);
+		return payloadInterface.Discovered();
 	}
 
 	@GetMapping("/discoveredurls")
 	@Async("threadPoolTaskExecutor")
 	public List<Payload> DiscoveredUrl() {
-		return payloadRepo.payLoadUrls(Status.DISCOVERED);
+		return payloadInterface.DiscoveredUrl();
 	}
 
 }

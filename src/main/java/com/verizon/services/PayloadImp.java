@@ -99,11 +99,11 @@ public class PayloadImp implements PayloadInterface {
 
     @Override
     public List<Payload> Discovered() {
-        return null;
+        return payloadRepo.findByStatus(Status.DISCOVERED);
     }
 
     @Override
     public List<Payload> DiscoveredUrl() {
-        return null;
+        return payloadRepo.payLoadUrls(Status.DISCOVERED);
     }
 }
