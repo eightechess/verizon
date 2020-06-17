@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: Verizon SpringBoot App
+  profiles:
+    active: elasticsearch
+
+
+
+
