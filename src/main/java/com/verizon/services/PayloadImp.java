@@ -9,6 +9,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -31,7 +33,7 @@ public class PayloadImp implements PayloadInterface {
     Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     @Override
-    public Iterable<Payload> getPayloads(String status){
+    public Iterable<Payload> getPayloads(@RequestParam(required = false) String status){
         Status newstatus = Status.valueOf(status);
         log.info("Status is: "+newstatus);
         if(status != null) {
@@ -42,8 +44,10 @@ public class PayloadImp implements PayloadInterface {
 
     @Override
     public String savePayload(Payload payload) {
-        log.info("savePayload: {}", payload);
+        payload.setStatus(Status.DISCOVERED);
+        payload.setLastUpdated(new Date());
         payloadRepo.save(payload);
+        log.info("savePayload: {}", payload);
         kafkaTemplate.send("REQUEST_SAMPLES",payload);
         return "Parameter "+payload.getRequestUrl() +" saved";
     }
