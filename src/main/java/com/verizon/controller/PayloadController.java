@@ -30,8 +30,6 @@ public class PayloadController {
 	@Autowired
 	private PayloadRepo payloadRepo;
 
-	Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-
 	@CrossOrigin(origins = "http://localhost:8082")
 	@GetMapping ("/getAllParameters")
 	public PayloadGroup getPayloads(@RequestParam(required = false) String status){
