@@ -27,13 +27,16 @@ public class PayloadController {
 	@Autowired
 	private PayloadInterface payloadInterface;
 
-	@Autowired
-	private PayloadRepo payloadRepo;
-
 	@CrossOrigin(origins = "http://localhost:8082")
 	@GetMapping ("/getAllParameters")
 	public PayloadGroup getPayloads(@RequestParam(required = false) String status){
 		return payloadInterface.getPayloads(status);
+	}
+
+	@PostMapping("/addrule")
+	@Async("threadPoolTaskExecutor")
+	public String saveRule(@RequestBody Payload payload) {
+		return payloadInterface.savePayload(payload);
 	}
 
 	@PostMapping("/addParameters")

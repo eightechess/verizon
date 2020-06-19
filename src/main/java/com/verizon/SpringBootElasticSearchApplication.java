@@ -12,7 +12,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 public class SpringBootElasticSearchApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SpringBootElasticSearchApplication.class, args);
+		SpringApplication. run(SpringBootElasticSearchApplication.class, args);
 	}
 
 	@Bean("threadPoolTaskExecutor")

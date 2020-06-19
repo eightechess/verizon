@@ -2,7 +2,9 @@ package com.verizon.services;
 
 import com.verizon.model.*;
 import com.verizon.repo.PayloadRepo;
+import com.verizon.repo.RuleRepo;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,9 @@ public class PayloadImp implements PayloadInterface {
 
     @Autowired
     private PayloadRepo payloadRepo;
+
+    @Autowired
+    private RuleRepo ruleRepo;
 
     @Autowired
     private KafkaTemplate kafkaTemplate;
@@ -49,6 +54,16 @@ public class PayloadImp implements PayloadInterface {
         payloadRepo.save(payload);
         kafkaTemplate.send("REQUEST_SAMPLES",payload);
         return "Parameter "+payload.getRequestUrl() +" saved";
+    }
+
+    @Override
+    public String saveRule(Payload payload) {
+        Rule rule = new Rule();
+        BeanUtils.copyProperties(rule, payload);
+        log.info("saveRule: {}", rule);
+        ruleRepo.save(rule);
+        kafkaTemplate.send("RULES_SAMPLES",rule);
+        return "Rule  "+rule.getRequestUrl() +" saved";
     }
 
     @Override
