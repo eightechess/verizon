@@ -13,6 +13,5 @@ import org.springframework.data.elasticsearch.annotations.Document;
 @Document(indexName= "group", shards = 2)
 public class Group {
     @Id
-    private int groupId;
     private String groupName;
 }
