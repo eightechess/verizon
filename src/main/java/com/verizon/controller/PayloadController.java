@@ -1,9 +1,6 @@
 package com.verizon.controller;
 
-import com.verizon.model.ParserSettings;
-import com.verizon.model.Payload;
-import com.verizon.model.PayloadGroup;
-import com.verizon.model.Status;
+import com.verizon.model.*;
 import com.verizon.repo.PayloadRepo;
 import com.verizon.services.PayloadInterface;
 import lombok.extern.log4j.Log4j2;
@@ -35,8 +32,31 @@ public class PayloadController {
 
 	@PostMapping("/addrule")
 	@Async("threadPoolTaskExecutor")
-	public String saveRule(@RequestBody Payload payload) {
-		return payloadInterface.savePayload(payload);
+	public void saveRule(@RequestBody Payload payload) {
+		payloadInterface.savePayload(payload);
+	}
+
+	@PostMapping("/addgroupname")
+	@Async("threadPoolTaskExecutor")
+	public void addGroupname(@RequestBody RequestUrlGroupName requestUrlGroupName) {
+		payloadInterface.addGroupname(requestUrlGroupName);
+	}
+
+	@PostMapping("/friendlyurl")
+	@Async("threadPoolTaskExecutor")
+	public void addFriendlyUrl(@RequestBody FriendlyUrl friendlyUrl) {
+		payloadInterface.addFriendlyUrl(friendlyUrl);
+	}
+
+	@CrossOrigin(origins = "http://localhost:8082")
+	@GetMapping ("/getgroupnames")
+	public List<Group> getGroups(){
+		return payloadInterface.getGroups();
+	}
+	@CrossOrigin(origins = "http://localhost:8082")
+	@PostMapping ("/addgroup")
+	public void getGroups(@RequestBody Group  group){
+		payloadInterface.addGroup(group);
 	}
 
 	@PostMapping("/addParameters")

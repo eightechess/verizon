@@ -1,8 +1,7 @@
 package com.verizon.services;
 
 import com.verizon.model.*;
-import com.verizon.repo.PayloadRepo;
-import com.verizon.repo.RuleRepo;
+import com.verizon.repo.*;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +26,15 @@ public class PayloadImp implements PayloadInterface {
 
     @Autowired
     private RuleRepo ruleRepo;
+
+    @Autowired
+    private RequestUrlGroupNameRepo requestUrlGroupNameRepo;
+
+    @Autowired
+    private FriendlyUrlRepo friendlyUrlRepo;
+
+    @Autowired
+    private GroupRepo groupRepo;
 
     @Autowired
     private KafkaTemplate kafkaTemplate;
@@ -57,13 +65,36 @@ public class PayloadImp implements PayloadInterface {
     }
 
     @Override
-    public String saveRule(Payload payload) {
+    public void saveRule(Payload payload) {
         Rule rule = new Rule();
         BeanUtils.copyProperties(rule, payload);
         log.info("saveRule: {}", rule);
         ruleRepo.save(rule);
         kafkaTemplate.send("RULES_SAMPLES",rule);
-        return "Rule  "+rule.getRequestUrl() +" saved";
+        log.info("Rule  "+rule.getRequestUrl() +" saved");
+    }
+
+    @Override
+    public void addGroupname(RequestUrlGroupName requestUrlGroupName) {
+        requestUrlGroupNameRepo.save(requestUrlGroupName);
+        log.info("RequestUrl and GroupName "+requestUrlGroupName.getRequestUrl() +" saved");
+    }
+
+    @Override
+    public List<Group> getGroups() {
+        return groupRepo.findAll();
+    }
+
+    @Override
+    public void addGroup(Group group) {
+        groupRepo.save(group);
+        log.info("GroupName "+group.getGroupName() +" saved");
+    }
+
+    @Override
+    public void addFriendlyUrl(FriendlyUrl friendlyUrl) {
+        friendlyUrlRepo.save(friendlyUrl);
+        log.info("Friendly Url "+friendlyUrl.getRequestUrl() +" saved");
     }
 
     @Override
