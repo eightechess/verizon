@@ -1,8 +1,6 @@
 package com.verizon.services;
 
 import com.verizon.model.*;
-import org.springframework.web.bind.annotation.RequestBody;
-
 import java.util.List;
 
 public interface PayloadInterface {

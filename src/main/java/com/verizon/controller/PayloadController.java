@@ -1,7 +1,6 @@
 package com.verizon.controller;
 
 import com.verizon.model.*;
-import com.verizon.repo.PayloadRepo;
 import com.verizon.services.PayloadInterface;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +8,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Log4j2
 @RestController
@@ -48,12 +41,13 @@ public class PayloadController {
 		payloadInterface.addFriendlyUrl(friendlyUrl);
 	}
 
-	@CrossOrigin(origins = "http://localhost:8082")
+	@CrossOrigin
 	@GetMapping ("/getgroupnames")
 	public List<Group> getGroups(){
 		return payloadInterface.getGroups();
 	}
-	@CrossOrigin(origins = "http://localhost:8082")
+
+	@CrossOrigin
 	@PostMapping ("/addgroup")
 	public void getGroups(@RequestBody Group  group){
 		payloadInterface.addGroup(group);

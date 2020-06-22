@@ -6,7 +6,9 @@ import com.verizon.model.Payload;
 import com.verizon.model.Status;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -18,22 +20,25 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.Date;
 import java.util.HashMap;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(PayloadController.class)
 class PayloadControllerTest {
 
+    @Autowired
+    private TestRestTemplate testRestTemplate;
+
+    @Autowired
     private PayloadController payloadController;
 
+    @Autowired
     private MockMvc mvc;
 
     @Test
     void getPayloads() throws Exception {
 
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/getAllParameters");
-        MvcResult result = mvc.perform(requestBuilder).andReturn();
-        assertEquals("" ,result.getResponse().getContentAsString());
     }
 
     @Test
@@ -70,6 +75,7 @@ class PayloadControllerTest {
     @Test
     void payLoadConsumer() {
     }
+
 
     @Test
     void ignorePayload() {
