@@ -3,6 +3,7 @@ package com.verizon.model;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -23,5 +24,7 @@ public class Payload {
 	private Status status;
 	@LastModifiedDate
 	private Date lastUpdated;
+	@CreatedDate
+	private Date created_last;
 }
 

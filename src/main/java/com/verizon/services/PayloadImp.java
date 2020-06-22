@@ -59,6 +59,7 @@ public class PayloadImp implements PayloadInterface {
     @Override
     public String savePayload(Payload payload) {
         log.info("savePayload: {}", payload);
+        payload.setCreated_last(new Date());
         payloadRepo.save(payload);
         kafkaTemplate.send("REQUEST_SAMPLES",payload);
         return "Parameter "+payload.getRequestUrl() +" saved";
