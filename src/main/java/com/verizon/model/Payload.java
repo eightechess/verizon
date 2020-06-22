@@ -25,6 +25,6 @@ public class Payload {
 	@LastModifiedDate
 	private Date lastUpdated;
 	@CreatedDate
-	private Date created_last;
+	private Date createdDate;
 }
 
