@@ -22,10 +22,7 @@ public class RuleImp implements  RuleInterface {
     private KafkaTemplate kafkaTemplate;
 
     @Override
-    public void saveRule(Payload payload) {
-        Rule rule = new Rule();
-        BeanUtils.copyProperties(rule, payload);
-        log.info("saveRule: {}", rule);
+    public void saveRule(Rule rule) {
         ruleRepo.save(rule);
         kafkaTemplate.send("RULES_SAMPLES",rule);
         log.info("Rule  "+rule.getName() +" saved");
