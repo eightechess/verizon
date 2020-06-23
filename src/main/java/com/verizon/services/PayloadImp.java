@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Log4j2
 public class PayloadImp implements PayloadInterface {
 
-    public static final List<String> STATUSES = Arrays.asList(Status.values()).stream().map(Status::name).collect(Collectors.toList());
+    public static final List<String> STATUSES = Arrays.stream(Status.values()).map(Status::name).collect(Collectors.toList());
 
     @Autowired
     private PayloadRepo payloadRepo;
@@ -59,7 +59,6 @@ public class PayloadImp implements PayloadInterface {
     @Override
     public String savePayload(Payload payload) {
         log.info("savePayload: {}", payload);
-        payload.setCreatedDate(new Date());
         payloadRepo.save(payload);
         kafkaTemplate.send("REQUEST_SAMPLES",payload);
         return "Parameter "+payload.getRequestUrl() +" saved";

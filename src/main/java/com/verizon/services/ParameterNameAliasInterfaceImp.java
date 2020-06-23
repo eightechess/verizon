@@ -20,8 +20,7 @@ public class ParameterNameAliasInterfaceImp implements ParameterNameAliasInterfa
     @Override
     public void addParameterNameAlias(ParameterNameAlias parameterNameAlias){
         parameterNameAliasRepo.save(parameterNameAlias);
-        log.info(" EntityAlias pair "+ parameterNameAlias.getEntityName() + ":" + parameterNameAlias.getAlias() + " saved");
-
+        log.info(" ParameterNameAlias pair "+ parameterNameAlias.getParameterName() + ":" + parameterNameAlias.getAlias() + " saved");
     }
 
 

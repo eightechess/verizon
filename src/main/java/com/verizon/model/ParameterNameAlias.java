@@ -12,11 +12,11 @@ import java.util.List;
 @Setter
 @ToString
 
-@Document(indexName= "entityAliasPair", shards = 2)
+@Document(indexName= "parameternamealiasmap", shards = 2)
 
 public class ParameterNameAlias {
 
     @Id
-    String EntityName;
+    String parameterName;
     List<String> Alias;
 }

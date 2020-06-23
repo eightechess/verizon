@@ -3,7 +3,6 @@ package com.verizon.model;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -17,14 +16,14 @@ import java.util.Map;
 
 @Document(indexName= "demopayload1", shards = 2)
 public class Payload {
+
 	@Id
 	private String requestUrl;
 	private Map<String,String> requestHeaders;
+	private Map<String,String> cookies;
 	private String payload;
 	private Status status;
 	@LastModifiedDate
 	private Date lastUpdated;
-	@CreatedDate
-	private Date createdDate;
 }
 
