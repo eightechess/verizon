@@ -8,6 +8,6 @@ import java.util.List;
 public interface RuleRepo extends ElasticsearchRepository<Rule, Long> {
     @Override
     List<Rule> findAll();
-    Rule findByRequestUrl(String requestUrl);
+    Rule findByName(String name);
 
 }

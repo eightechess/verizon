@@ -41,8 +41,8 @@ public class RuleController {
 
     @GetMapping("/getrule")
     @Async("threadPoolTaskExecutor")
-    public Rule getRule(@RequestBody String requestUrl) {
-        return ruleInterface.getRule(requestUrl);
+    public Rule getRule(@RequestBody String name) {
+        return ruleInterface.getRule(name);
     }
 
     @GetMapping("/getrules")

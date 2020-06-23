@@ -22,7 +22,7 @@ public class Rule {
 	private String name;
 	private String type;
 	private String uri;
-	private Map<String,String> parameterKeys;
+	private String parameterKeys;
 	private Map<String,String> parameterDictionary;
 }
 
