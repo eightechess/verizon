@@ -8,6 +8,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Log4j2
@@ -25,6 +26,7 @@ public class PayloadController {
 
 	@PostMapping(path = "/addParameters", consumes = "application/json", produces = "text/plain")
 	public String savePayload(@RequestBody Payload payload) {
+		payload.setCreatedDate( new Date());
 		return payloadInterface.savePayload(payload);
 	}
 
