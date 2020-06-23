@@ -1,7 +1,7 @@
 package com.verizon.controller;
 
 import com.verizon.model.ParameterNameAlias;
-import com.verizon.services.ParameterNameAliasInterface;
+import com.verizon.services.alias.ParameterNameAliasInterface;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

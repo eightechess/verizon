@@ -1,21 +1,14 @@
 package com.verizon.controller;
 
 import com.verizon.model.*;
-import com.verizon.repo.PayloadRepo;
-import com.verizon.services.PayloadInterface;
+import com.verizon.services.payload.PayloadInterface;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Log4j2
 @RestController
@@ -24,40 +17,10 @@ public class PayloadController {
 	@Autowired
 	private PayloadInterface payloadInterface;
 
-
 	@CrossOrigin
 	@GetMapping ("/getAllParameters")
 	public PayloadGroup getPayloads(@RequestParam(required = false) String status){
 		return payloadInterface.getPayloads(status);
-	}
-
-	@PostMapping("/addrule")
-	@Async("threadPoolTaskExecutor")
-	public void saveRule(@RequestBody Payload payload) {
-		payloadInterface.savePayload(payload);
-	}
-
-	@PostMapping("/addgroupname")
-	@Async("threadPoolTaskExecutor")
-	public void addGroupname(@RequestBody RequestUrlGroupName requestUrlGroupName) {
-		payloadInterface.addGroupname(requestUrlGroupName);
-	}
-
-	@PostMapping("/friendlyurl")
-	@Async("threadPoolTaskExecutor")
-	public void addFriendlyUrl(@RequestBody FriendlyUrl friendlyUrl) {
-		payloadInterface.addFriendlyUrl(friendlyUrl);
-	}
-
-	@CrossOrigin
-	@GetMapping ("/getgroupnames")
-	public List<Group> getGroups(){
-		return payloadInterface.getGroups();
-	}
-	@CrossOrigin
-	@PostMapping ("/addgroup")
-	public void getGroups(@RequestBody Group  group){
-		payloadInterface.addGroup(group);
 	}
 
 	@PostMapping(path = "/addParameters", consumes = "application/json", produces = "text/plain")
@@ -93,5 +56,6 @@ public class PayloadController {
 	public List<Payload> DiscoveredUrl() {
 		return payloadInterface.DiscoveredUrl();
 	}
+
 
 }

@@ -1,9 +1,11 @@
-package com.verizon.services;
+package com.verizon.services.payload;
 
 import com.verizon.model.*;
-import com.verizon.repo.*;
+import com.verizon.repo.FriendlyUrlRepo;
+import com.verizon.repo.GroupRepo;
+import com.verizon.repo.PayloadRepo;
+import com.verizon.repo.RequestUrlGroupNameRepo;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -25,16 +27,7 @@ public class PayloadImp implements PayloadInterface {
     private PayloadRepo payloadRepo;
 
     @Autowired
-    private RuleRepo ruleRepo;
-
-    @Autowired
-    private RequestUrlGroupNameRepo requestUrlGroupNameRepo;
-
-    @Autowired
     private FriendlyUrlRepo friendlyUrlRepo;
-
-    @Autowired
-    private GroupRepo groupRepo;
 
     @Autowired
     private KafkaTemplate kafkaTemplate;
@@ -62,39 +55,6 @@ public class PayloadImp implements PayloadInterface {
         payloadRepo.save(payload);
         kafkaTemplate.send("REQUEST_SAMPLES",payload);
         return "Parameter "+payload.getRequestUrl() +" saved";
-    }
-
-    @Override
-    public void saveRule(Payload payload) {
-        Rule rule = new Rule();
-        BeanUtils.copyProperties(rule, payload);
-        log.info("saveRule: {}", rule);
-        ruleRepo.save(rule);
-        kafkaTemplate.send("RULES_SAMPLES",rule);
-        log.info("Rule  "+rule.getRequestUrl() +" saved");
-    }
-
-    @Override
-    public void addGroupname(RequestUrlGroupName requestUrlGroupName) {
-        requestUrlGroupNameRepo.save(requestUrlGroupName);
-        log.info("RequestUrl and GroupName "+requestUrlGroupName.getRequestUrl() +" saved");
-    }
-
-    @Override
-    public List<Group> getGroups() {
-        return groupRepo.findAll();
-    }
-
-    @Override
-    public void addGroup(Group group) {
-        groupRepo.save(group);
-        log.info("GroupName "+group.getGroupName() +" saved");
-    }
-
-    @Override
-    public void addFriendlyUrl(FriendlyUrl friendlyUrl) {
-        friendlyUrlRepo.save(friendlyUrl);
-        log.info("Friendly Url "+friendlyUrl.getRequestUrl() +" saved");
     }
 
     @Override
