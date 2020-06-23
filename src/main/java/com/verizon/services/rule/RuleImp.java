@@ -29,8 +29,8 @@ public class RuleImp implements  RuleInterface {
     }
 
     @Override
-    public Rule getRule(String requestUrl) {
-        return ruleRepo.findByRequestUrl(requestUrl);
+    public Rule getRule(String name) {
+        return ruleRepo.findByName(name);
     }
 
     @Override
