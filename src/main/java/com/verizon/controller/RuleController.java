@@ -23,8 +23,8 @@ public class RuleController {
 
     @PostMapping("/addrule")
     @Async("threadPoolTaskExecutor")
-    public void saveRule(@RequestBody Payload payload) {
-        ruleInterface.saveRule(payload);
+    public void saveRule(@RequestBody Rule rule) {
+        ruleInterface.saveRule(rule);
     }
 
     @PostMapping("/editrule")
@@ -35,8 +35,8 @@ public class RuleController {
 
     @GetMapping("/deleterule")
     @Async("threadPoolTaskExecutor")
-    public void deleteRule(@RequestBody String requestUrl) {
-        ruleInterface.deleteRule(requestUrl);
+    public void deleteRule(@RequestBody Long id) {
+        ruleInterface.deleteRule(id);
     }
 
     @GetMapping("/getrule")

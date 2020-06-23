@@ -28,7 +28,7 @@ public class RuleImp implements  RuleInterface {
         log.info("saveRule: {}", rule);
         ruleRepo.save(rule);
         kafkaTemplate.send("RULES_SAMPLES",rule);
-        log.info("Rule  "+rule.getRequestUrl() +" saved");
+        log.info("Rule  "+rule.getName() +" saved");
     }
 
     @Override
@@ -42,8 +42,8 @@ public class RuleImp implements  RuleInterface {
     }
 
     @Override
-    public void deleteRule(String requestUrl) {
-        ruleRepo.deleteById(requestUrl);
+    public void deleteRule(Long id) {
+        ruleRepo.deleteById(id);
     }
 
     @Override

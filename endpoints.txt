@@ -4,17 +4,11 @@
 /editfriendlyurl
 /deletefriendlyurl
 
-
-
-
-
 /addgroupname
 /getgroupnames
 /addgroup
 /editgroup
 /deletegroup
-
-
 
 /addrule
 /editrule
