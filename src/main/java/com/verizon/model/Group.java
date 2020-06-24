@@ -9,7 +9,6 @@ import org.springframework.data.elasticsearch.annotations.Document;
 @Getter
 @Setter
 @ToString
-
 @Document(indexName= "group", shards = 2)
 public class Group {
     @Id

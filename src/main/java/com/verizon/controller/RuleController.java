@@ -1,16 +1,11 @@
 package com.verizon.controller;
 
-import com.verizon.model.Payload;
 import com.verizon.model.Rule;
-import com.verizon.services.payload.PayloadInterface;
 import com.verizon.services.rule.RuleInterface;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,20 +28,20 @@ public class RuleController {
         ruleInterface.editRule(rule);
     }
 
+    @CrossOrigin
     @GetMapping("/deleterule")
-    @Async("threadPoolTaskExecutor")
     public void deleteRule(@RequestBody Long id) {
         ruleInterface.deleteRule(id);
     }
 
+    @CrossOrigin
     @GetMapping("/getrule")
-    @Async("threadPoolTaskExecutor")
     public Rule getRule(@RequestBody String name) {
         return ruleInterface.getRule(name);
     }
 
+    @CrossOrigin
     @GetMapping("/getrules")
-    @Async("threadPoolTaskExecutor")
     public List<Rule> getRules() {
         return ruleInterface.getRules();
     }

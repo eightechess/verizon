@@ -14,7 +14,6 @@ import java.util.Map;
 @Getter
 @Setter
 @ToString
-
 @Document(indexName= "demopayload1", shards = 2)
 public class Payload {
 

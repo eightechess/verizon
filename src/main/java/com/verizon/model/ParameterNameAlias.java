@@ -11,9 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-
 @Document(indexName= "parameternamealiasmap", shards = 2)
-
 public class ParameterNameAlias {
 
     @Id

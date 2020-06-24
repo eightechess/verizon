@@ -24,7 +24,7 @@ public class PayloadController {
 		return payloadInterface.getPayloads(status);
 	}
 
-	@PostMapping(path = "/addParameters", consumes = "application/json", produces = "text/plain")
+	@PostMapping(path = "/addParameters")
 	public String savePayload(@RequestBody Payload payload) {
 		payload.setCreatedDate( new Date());
 		return payloadInterface.savePayload(payload);
@@ -47,14 +47,14 @@ public class PayloadController {
 		return payloadInterface.ignorePayload(payloads);
 	}
 
+	@CrossOrigin
 	@GetMapping("/discovered")
-	@Async("threadPoolTaskExecutor")
 	public Iterable<Payload> Discovered() {
 		return payloadInterface.Discovered();
 	}
 
+	@CrossOrigin
 	@GetMapping("/discoveredurls")
-	@Async("threadPoolTaskExecutor")
 	public List<Payload> DiscoveredUrl() {
 		return payloadInterface.DiscoveredUrl();
 	}
