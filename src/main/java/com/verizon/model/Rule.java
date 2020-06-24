@@ -18,7 +18,7 @@ public class Rule {
 	private String name;
 	private String type;
 	private String uri;
-	private String parameterKeys;
+	private String parameterKeys[];
 	private Map<String,String> parameterDictionary;
 }
 
